@@ -57,7 +57,7 @@ class Server(object):
                             if i != length-1:
                                 c = [text[i], text[i+1]]
                             else:
-                                с = [text[i], ""]
+                                c = [text[i], ""]
                             if user in self.admins:
                                 self.command_stack["admins"].append(c)
                             else:
@@ -68,15 +68,30 @@ class Server(object):
         for com in self.command_stack["users"]:
             if com[0] == "send":
                 self.send_info()
+            if com[0] == "add":
+                self.add_link(com[1])
         for com in self.command_stack["admins"]:
             if com[0] == "send":
                 self.send_info()
+            if com[0] == "add":
+                self.add_link(com[1])
 
     def send_info(self):
-        with open("info.txt", "r") as file:
+        with open("/home/mikhail/git/mail_scripts/info.txt", "r") as file:
             print(file)
             for user in self.users:
                 write(self.login, self.password, user, file.read())
+
+    def add_link(self, link):
+        with open("/home/mikhail/moin/moin-1.9.11/wiki/data/pages/MyStartingPage/current", "r") as read_file:
+            current = read_file.read()[:8]
+        with open("/home/mikhail/moin/moin-1.9.11/wiki/data/pages/MyStartingPage/revisions/" + current, "r") as read_current_file:
+            current_data = read_current_file.read()
+        with open("/home/mikhail/moin/moin-1.9.11/wiki/data/pages/MyStartingPage/revisions/" + current, "w") as write_file:
+            write_file.write(current_data)
+            write_file.write("\n")
+            write_file.write(link) 
+
 
     def process(self):
         self.read_mails()
@@ -116,11 +131,11 @@ def read(username, password, sender_of_interest=None):
     if (data_list != []):
     	write(username, password, sender_of_interest)
 
-with open("users.json", "r") as users_file:
+with open("/home/mikhail/git/mail_scripts/users.json", "r") as users_file:
     users_root = json.load(users_file)
 users = users_root["mail_of_interest"]
 
-with open("servers_mail.json", "r") as mails_file:
+with open("/home/mikhail/git/mail_scripts/servers_mail.json", "r") as mails_file:
     mails_root = json.load(mails_file)
 mails = mails_root["mails"]
 
