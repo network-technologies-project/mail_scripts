@@ -1,0 +1,8 @@
+{
+	"mail_of_interest": [
+		{ 
+		  "role": "admin",
+		  "mail": "your_mail"
+		}
+	]
+}
